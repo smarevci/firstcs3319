@@ -1,0 +1,23 @@
+-- build the database for assignment 2 and start using it
+SHOW DATABASES; 
+DROP DATABASE smarevciassign2db; 
+CREATE DATABASE smarevciassign2db; 
+USE smarevciassign2db; 
+
+-- give the ta access to database (for marking)
+GRANT USAGE ON *.* TO 'ta'@'localhost';
+DROP USER 'ta'@'localhost';
+CREATE USER 'ta'@'localhost' IDENTIFIED BY 'cs3319';
+GRANT ALL PRIVILEGES ON yourwesternuseridassign2db.* TO 'ta'@'localhost';
+FLUSH PRIVILEGES;
+
+-- create/build the tables needed for assignment 2 in our database
+SHOW tables;
+CREATE TABLE patient(ohipNumber INT NOT NULL, fnamePatient VARCHAR(20), lnamePatient VARCHAR(20), PRIMARY KEY(ohipNumber)); 
+CREATE TABLE doctor(FNameDoc VARCHAR(20), LNameDoc VARCHAR(20), LicenseNumber VARCHAR(4) NOT NULL, LicenseDate DATE, Specialty VARCHAR(30), PRIMARY KEY(LicenseNumber)); 
+CREATE TABLE hospital (HospitalCode VARCHAR(4) NOT NULL, Name VARCHAR(20), City VARCHAR(20), Province VARCHAR(2), NumOfBeds INT); 
+CREATE TABLE treats(ohipNum INT NOT NULL, licenseNum VARCHAR(4) NOT NULL, FOREIGN KEY (ohipNum) REFERENCES patient(OHIPNumber), FOREIGN KEY (licenseNum) REFERENCES doctor(LicenseNumber) ON DELETE CASCADE);
+
+CREATE TRIGGER doctor.triggerOnDelete ON doctor.LicenseNumber AFTER DELETE 
+-- list all the tables again
+SHOW tables;
